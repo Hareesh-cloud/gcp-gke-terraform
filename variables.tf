@@ -1,9 +1,9 @@
 variable "name" {
-  default = "demo-cluster"
+  default = "gcpcluster"
 }
 
 variable "project" {
-  default = "optimum-spring-238818"
+  default = "decent-habitat-315907"
 }
 
 variable "location" {
@@ -11,7 +11,7 @@ variable "location" {
 }
 
 variable "initial_node_count" {
-  default = 1
+  default = 3
 }
 
 variable "machine_type" {
