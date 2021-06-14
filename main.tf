@@ -39,8 +39,31 @@ resource "google_container_node_pool" "default" {
   }
 }
 # Create build and run
-resource "null_resource" "gcloud" {
-  provisioner "local-exec" {
-    command = "gcloud builds submit --config=cloudbuild.yaml"
+resource "kubernetes_service" "vault-lb" {
+  metadata {
+    name = "vault"
+    labels = {
+      app = "vault"
+    }
+  }
+
+  spec {
+    type                        = "LoadBalancer"
+    load_balancer_ip            = google_compute_address.vault.address
+    load_balancer_source_ranges = var.vault_source_ranges
+    external_traffic_policy     = "Local"
+
+    selector = {
+      app          = "vault"
+      vault-active = "true"
+    }
+
+    port {
+      name        = "vault-port"
+      port        = 443
+      target_port = 8200
+      protocol    = "TCP"
+    }
   }
 }
+
